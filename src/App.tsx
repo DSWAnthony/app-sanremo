@@ -1,33 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AppLayout from './layouts/AppLayout';
+import DashboardAdmin from './features/admin/pages/DashboardAdmin';
+import DashboardAlmacen from './features/staff/pages/DashboardAlmacen';
 
-function App() {
-  const [count, setCount] = useState(0)
+function App() {  
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Router>
+          <Routes>
+
+
+          {/* Rutas para Administrador */}
+          <Route 
+            path="/admin/*" 
+            element={<AppLayout userRole="admin" />}
+          >
+            <Route index element={ <DashboardAdmin /> } />
+            <Route path="solicitudes" element={<h1>Solicitudes Admin</h1>} />
+            <Route path="ordenes-compra" element={<h1>Órdenes de Compra Admin</h1>} />
+            <Route path="proveedores" element={<h1>Proveedores Admin</h1>} />
+            <Route path="productos" element={<h1>Productos Admin</h1>} />
+            <Route path="usuarios" element={<h1>Usuarios Admin</h1>} />
+            <Route path="inventario" element={<h1>Inventario Admin</h1>} />
+          </Route>
+
+          {/* Rutas para almacén */}
+          <Route 
+            path="/almacen/*" 
+            element={<AppLayout userRole="warehouse" />}
+          >
+            <Route index element={ <DashboardAlmacen /> } />
+            <Route path="solicitudes" element={<h1>Solicitudes Almacén</h1>} />
+          </Route>
+
+
+          {/* Ruta de error para paths no encontrados */}
+          <Route path="*" element={<h1>Página no encontrada</h1>} />
+
+          </Routes>
+      </Router>
     </>
   )
 }
