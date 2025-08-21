@@ -1,8 +1,13 @@
+import HeaderSection from "../components/orders/HeaderSection"
+import StatsGrid from "../components/orders/StatsGrid"
 
 
 const OrdersPage = () => {
   return (
-    <div>OdersPage</div>
+    <>
+      <HeaderSection />
+      <StatsGrid />
+    </>
   )
 }
 

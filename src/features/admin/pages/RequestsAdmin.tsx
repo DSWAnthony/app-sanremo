@@ -1,8 +1,18 @@
+import HeaderSection from "../components/requests/HeaderSection"
+import StatsGrid from "../components/requests/StatsGrid"
 
-const RequestAdmin = () => {
+const RequestsAdmin = () => {
   return (
-    <div>RequestAdmin</div>
+    <>
+      <div className="mb-5">
+        <HeaderSection />
+      </div>
+      <div className="mb-5">
+        <StatsGrid />
+      </div>
+
+    </>
   )
 }
 
-export default RequestAdmin
+export default RequestsAdmin
