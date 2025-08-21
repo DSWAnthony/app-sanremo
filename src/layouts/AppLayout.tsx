@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import Notification from "../components/notification/Notification"
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import { 
   Package, 
   Home, 
@@ -106,9 +106,9 @@ export default function AppLayout({ userRole }: AppLayoutProps) {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
+                    <Link to={userRole === 'admin' ? '/admin' : '/almacen'}>
                       {userRole === 'admin' ? 'Administración' : 'Almacén'}
-                    </BreadcrumbLink>
+                    </Link>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
@@ -121,6 +121,7 @@ export default function AppLayout({ userRole }: AppLayoutProps) {
 
           <div className="ml-auto flex items-center gap-2">
             <Notification />
+            <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
             <NavUser user={user} />
           </div>
         </header>
