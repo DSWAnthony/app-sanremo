@@ -1,7 +1,7 @@
 import { DashboardAdmin, InventoryPage, OrdersPage,ProductsPage,RequestsAdmin,SuppliersPage, UsersPage } from '@/features/admin/pages/index';
 import {DashboardAlmacen, RequestsAlmacen} from '@/features/staff/pages/index';
 import AppLayout from '@/layouts/AppLayout';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 export default function AppRouter() {  
 
@@ -9,7 +9,7 @@ export default function AppRouter() {
     <>
       <Router>
           <Routes>
-
+          <Route path="/" element={<Navigate to="/admin" />} />
 
           {/* Rutas para Administrador */}
           <Route 
