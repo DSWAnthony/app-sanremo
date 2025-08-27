@@ -9,7 +9,7 @@ const StatsGrid = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Órdenes</p>
-                <p className="text-2xl font-bold text-foreground">20</p>
+                <p className="text-2xl font-bold text-foreground">50</p>
               </div>
               <ShoppingCart className="h-8 w-8 text-primary" />
             </div>
@@ -21,7 +21,9 @@ const StatsGrid = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Pendientes</p>
-
+                <p className="text-2xl font-bold text-warning">
+                  20
+                </p>
               </div>
               <Calendar className="h-8 w-8 text-warning" />
             </div>
@@ -33,7 +35,9 @@ const StatsGrid = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Enviadas</p>
-
+                <p className="text-2xl font-bold text-primary">
+                  10
+                </p>
               </div>
               <Package className="h-8 w-8 text-primary" />
             </div>
@@ -45,7 +49,9 @@ const StatsGrid = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Recibidas</p>
-
+                <p className="text-2xl font-bold text-success">
+                  20
+                </p>
               </div>
               <Package className="h-8 w-8 text-success" />
             </div>

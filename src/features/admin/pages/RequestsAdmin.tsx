@@ -1,3 +1,4 @@
+import Content from "../components/requests/Content"
 import HeaderSection from "../components/requests/HeaderSection"
 import StatsGrid from "../components/requests/StatsGrid"
 
@@ -10,7 +11,7 @@ const RequestsAdmin = () => {
       <div className="mb-5">
         <StatsGrid />
       </div>
-
+      <Content></Content>
     </>
   )
 }

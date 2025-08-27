@@ -97,7 +97,7 @@ export default function AppLayout({ userRole }: AppLayoutProps) {
     <SidebarProvider>
       <AppSidebar data={items} userRole={userRole} />
       <SidebarInset>
-        <header className="sticky top-0 z-50 bg-gray-400/80 backdrop-blur-sm h-16 flex items-center px-4 gap-4 border-b">
+        <header className="sticky top-0 z-50 bg-[#f3f4f5]/80 backdrop-blur-sm h-16 flex items-center px-4 gap-4 border-b">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
