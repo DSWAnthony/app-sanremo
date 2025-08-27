@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const FilterProducts = () => {
+const ProductsFilter = () => {
   return (
     <Card className="card-elevated">
       <CardHeader className="pb-0">
@@ -83,4 +83,4 @@ const FilterProducts = () => {
   );
 };
 
-export default FilterProducts;
+export default ProductsFilter;

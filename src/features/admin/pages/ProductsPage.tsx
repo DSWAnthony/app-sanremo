@@ -1,16 +1,21 @@
-import HeaderSecction from "../components/products/HeaderSecction";
 import StatsGrid from "../components/products/StatsGrid";
-import FilterProducts from "../components/products/FilterProducts";
+import ProductsFilter from "../components/products/ProductsFilter";
 import ProductsGrid from "../components/products/ProductsGrid";
+import SectionHeader from "@/components/common/SectionHeader";
 
 const ProductPage = () => {
   return (
     <div>
-      <HeaderSecction />
+      <SectionHeader
+        title="Productos"
+        subtitle="Explora el catálogo de productos disponibles"
+        //buttonText="Agregar producto"
+        //onButtonClick={() => {}}
+      />
       <br />
       <StatsGrid />
       <br />
-      <FilterProducts />
+      <ProductsFilter />
       <br />
       <ProductsGrid />
     </div>
