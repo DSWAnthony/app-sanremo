@@ -1,9 +1,5 @@
-
-
 const UserPage = () => {
-  return (
-    <div>UserPage</div>
-  )
-}
+  return <></>;
+};
 
-export default UserPage
+export default UserPage;
