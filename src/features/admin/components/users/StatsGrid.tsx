@@ -1,25 +1,25 @@
 import StatCard from "@/components/common/StatCard";
-import { Users, Package } from "lucide-react";
+import { UserPlus, Shield, User } from "lucide-react";
 
 const StatsGrid = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <StatCard
-        label="Total Proveedores"
-        value={20}
-        icon={Users}
+        label="Total Usuarios"
+        value={4}
+        icon={UserPlus}
         color="text-primary"
       />
       <StatCard
-        label="Productos Totales"
-        value={25}
-        icon={Package}
+        label="Administradores"
+        value={2}
+        icon={Shield}
         color="text-success"
       />
       <StatCard
-        label="Promedio Productos"
-        value={8.5}
-        icon={Package}
+        label="Personal Almacén"
+        value={2}
+        icon={User}
         color="text-warning"
       />
     </div>

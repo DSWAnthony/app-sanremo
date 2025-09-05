@@ -1,26 +1,11 @@
-import { Card, CardContent } from "@/components/ui/card";
+import StatCard from "@/components/common/StatCard";
 
 const StatsGrid = () => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-      <Card className="card-elevated">
-        <CardContent className="p-4">
-          <div className="text-2xl font-bold text-foreground">10</div>
-          <p className="text-xs text-muted-foreground">Productos</p>
-        </CardContent>
-      </Card>
-      <Card className="card-elevated">
-        <CardContent className="p-4">
-          <div className="text-2xl font-bold text-warning">5</div>
-          <p className="text-xs text-muted-foreground">Disponibles</p>
-        </CardContent>
-      </Card>
-      <Card className="card-elevated">
-        <CardContent className="p-4">
-          <div className="text-2xl font-bold text-success">3</div>
-          <p className="text-xs text-muted-foreground">Sin Stock</p>
-        </CardContent>
-      </Card>
+      <StatCard label="Total Productos" value={20} color="text-primary" />
+      <StatCard label="Productos Disponibles" value={25} color="text-success" />
+      <StatCard label="Sin Stock" value={8.5} color="text-warning" />
     </div>
   );
 };
