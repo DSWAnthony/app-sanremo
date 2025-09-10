@@ -1,5 +1,6 @@
 import { DashboardAdmin, InventoryPage, OrdersPage,ProductsPage,RequestsAdmin,SuppliersPage, UsersPage } from '@/features/admin/pages/index';
 import {DashboardAlmacen, RequestsAlmacen} from '@/features/staff/pages/index';
+import NewRequestForm from '@/features/staff/pages/Requests/NewRequestForm';
 import AppLayout from '@/layouts/AppLayout';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -35,7 +36,7 @@ export default function AppRouter() {
 
             <Route index element={ <DashboardAlmacen /> } />
             <Route path="solicitudes" element={<RequestsAlmacen />} />
-
+            <Route path="solicitudes/nueva" element={<NewRequestForm />} /> 
           </Route>
 
 

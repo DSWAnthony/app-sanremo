@@ -2,15 +2,8 @@ import React from "react";
 import { Package, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import type { Product } from "@/types/product";
 
-export interface Product {
-  id: string;
-  name: string;
-  description?: string;
-  unit: string;
-  category?: string;
-  inStock: boolean;
-}
 
 interface ProductCardProps {
   product: Product;

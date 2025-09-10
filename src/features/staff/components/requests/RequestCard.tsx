@@ -91,9 +91,6 @@ export const RequestCard: React.FC<RequestCardProps> = ({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Aprobar</DropdownMenuItem>
-                  <DropdownMenuItem>Rechazar</DropdownMenuItem>
-                  <DropdownMenuItem>Asignar Proveedor</DropdownMenuItem>
                   <DropdownMenuItem>Editar</DropdownMenuItem>
                   <DropdownMenuItem className="text-destructive">
                     Eliminar
@@ -123,10 +120,6 @@ export const RequestCard: React.FC<RequestCardProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center space-x-1">
-              <User className="h-3 w-3" />
-              <span>{request.requestedByName}</span>
-            </div>
-            <div className="flex items-center space-x-1">
               <Calendar className="h-3 w-3" />
               <span>
                 {format(request.createdAt, "dd MMM yyyy", { locale: es })}
@@ -134,11 +127,6 @@ export const RequestCard: React.FC<RequestCardProps> = ({
             </div>
           </div>
 
-          {request.assignedSupplier && (
-            <div className="text-xs text-success bg-success/10 p-2 rounded">
-              Asignado a proveedor
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>

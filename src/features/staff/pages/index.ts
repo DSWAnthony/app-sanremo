@@ -1,3 +1,3 @@
 
-export { default as DashboardAlmacen } from "./DashboardAlmacen";
-export { default as RequestsAlmacen } from "./RequestsAlmacen";
+export { default as DashboardAlmacen } from "./Dashboard/DashboardAlmacen";
+export { default as RequestsAlmacen } from "./Requests/RequestsAlmacen";
