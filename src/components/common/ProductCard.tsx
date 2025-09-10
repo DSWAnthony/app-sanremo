@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 export interface Product {
   id: string;
   name: string;
+  sku: string;
   description?: string;
   unit: string;
   category?: string;
