@@ -1,66 +1,44 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { SelectItem, SelectValue } from '@/components/ui/select'
-import type { ProductRequest } from '@/types/product'
-import { Select, SelectContent, SelectTrigger } from '@radix-ui/react-select'
-import { Search } from 'lucide-react'
-import { RequestCard } from './RequestCard'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search } from 'lucide-react';
+import { RequestCard } from './RequestCard';
+import type { Request } from '@/types/request';
+import { useMemo, useState } from 'react';
 
+type ContentProps = {
+  requests: Request[];
+  onViewSummary: (request: Request) => void;
+}
 
-const mockRequests: ProductRequest[] = [
-  {
-    id: '1',
-    productName: 'Arroz Blanco',
-    quantity: 50,
-    unit: 'kg',
-    observations: 'Calidad premium para preparaciones especiales',
-    requestedBy: '2',
-    requestedByName: 'Carlos López',
-    status: 'pending',
-    createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15')
-  },
-  {
-    id: '2',
-    productName: 'Aceite Vegetal',
-    quantity: 10,
-    unit: 'litros',
-    requestedBy: '2',
-    requestedByName: 'Carlos López',
-    status: 'approved',
-    createdAt: new Date('2024-01-14'),
-    updatedAt: new Date('2024-01-14')
-  },
-  {
-    id: '3',
-    productName: 'Pasta Italiana',
-    quantity: 25,
-    unit: 'kg',
-    observations: 'Preferencia por marca reconocida',
-    requestedBy: '3',
-    requestedByName: 'Ana Martínez',
-    status: 'assigned',
-    assignedSupplier: 'supplier-1',
-    createdAt: new Date('2024-01-13'),
-    updatedAt: new Date('2024-01-13')
-  },
-  {
-    id: '4',
-    productName: 'Detergente Industrial',
-    quantity: 5,
-    unit: 'litros',
-    requestedBy: '2',
-    requestedByName: 'Carlos López',
-    status: 'rejected',
-    createdAt: new Date('2024-01-12'),
-    updatedAt: new Date('2024-01-12')
-  }
-];
+const Content = ({ requests, onViewSummary }: ContentProps) => {
+  const [stockFilter, setStockFilter] = useState<string>('all');
+  const [query, setQuery] = useState<string>('');
 
-const Content = () => {
-return (
+  // Filtrado con useMemo para evitar recomputes innecesarios
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return requests.filter(r => {
+      // filtro por stock: asumo que cada request puede tener items y producto tiene stock booleano o similar
+      if (stockFilter === 'available') {
+        // si existe al menos 1 item con product.available true (ajusta según tu schema)
+        if (!r.items.some(it => (it.product as any).available)) return false;
+      } else if (stockFilter === 'out-of-stock') {
+        if (!r.items.some(it => !(it.product as any).available)) return false;
+      }
+
+      // búsqueda simple en nombre de producto y solicitante (ajusta campos según estructura)
+      if (!q) return true;
+
+      const matchesProduct = r.items.some(it => it.product.name?.toLowerCase().includes(q));
+      // const matchesRequester = (r.user?.name ?? '').toLowerCase().includes(q);
+      return matchesProduct ;
+    });
+  }, [requests, stockFilter, query]);
+
+  return (
     <>
-        <Card className="card-elevated mb-5">
+      <Card className="card-elevated mb-5">
         <CardHeader className="pb-4">
           <CardTitle className="text-lg">Filtros</CardTitle>
         </CardHeader>
@@ -72,38 +50,46 @@ return (
                 <Input
                   placeholder="Buscar por producto o solicitante..."
                   className="pl-10"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
               </div>
             </div>
-            <Select >
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Estado" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos los estados</SelectItem>
-                <SelectItem value="pending">Pendientes</SelectItem>
-                <SelectItem value="approved">Aprobadas</SelectItem>
-                <SelectItem value="assigned">Asignadas</SelectItem>
-                <SelectItem value="rejected">Rechazadas</SelectItem>
-              </SelectContent>
-            </Select>
+
+            <div className="w-56">
+              <Select value={stockFilter} onValueChange={setStockFilter}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Disponibilidad" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="available">Disponibles</SelectItem>
+                  <SelectItem value="out-of-stock">Sin stock</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
-    
-    {/* Requests Grid */}
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockRequests.map((request) => (
+
+      {/* Requests Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.length === 0 ? (
+          <div className="col-span-full text-center text-sm text-muted-foreground py-8">
+            No hay solicitudes que coincidan.
+          </div>
+        ) : (
+          filtered.map(request => (
             <RequestCard
               key={request.id}
               request={request}
+              onViewSummary={() => onViewSummary(request)}
             />
-          ))}
-     </div>
-    
-
+          ))
+        )}
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;

@@ -7,3 +7,11 @@ export interface Supplier {
   products: string[]; // Product IDs associated with this supplier
   createdAt: Date;
 }
+
+
+export type SupplierRequest = {
+  name: string;
+  contact: string;
+  phone: string;
+  email: string;
+}

@@ -5,12 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { QuantityStepper } from '@/components/common/QuantityStepper';
 import { ShoppingCart } from 'lucide-react';
-import type { RequestItem } from '@/types/request';
+import type { RequestItemForm } from '@/types/request';
 
 interface QuantityFormProps {
-  requestItems: RequestItem[];
-  onQuantityChange: (productId: string, quantity: number) => void;
-  onObservationsChange: (productId: string, observations: string) => void;
+  requestItems: RequestItemForm[];
+  onQuantityChange: (productId: number, quantity: number) => void;
+  onObservationsChange: (productId: number, observations: string) => void;
 }
 
 export const QuantityForm: React.FC<QuantityFormProps> = ({

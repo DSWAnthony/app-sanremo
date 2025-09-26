@@ -1,14 +1,27 @@
+import type { Category } from "./category";
+
 export type Product = {
-  id: string;
+  id: number;
   name: string;
   description?: string;
+  category: Category;
   unit: string;
-  category?: string;
-  inStock: boolean;
+  price: number;
+  quantity: number
+  createdAt: Date;
+}
+
+export type ProductForm = {
+  name: string;
+  description?: string;
+  categoryId: number;
+  unit: string;
+  price: number;
+  quantity: number
 }
 
 export interface ProductRequest {
-  id: string;
+  id: number;
   productName: string;
   quantity: number;
   unit: string;

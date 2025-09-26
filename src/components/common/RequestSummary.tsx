@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { FileText } from 'lucide-react';
-import type { RequestItem } from '@/types/request';
+import type { RequestItemForm } from '@/types/request';
 
 interface RequestSummaryProps {
-  requestItems: RequestItem[];
+  requestItems: RequestItemForm[];
   generalObservations: string;
   onGeneralObservationsChange: (observations: string) => void;
 }

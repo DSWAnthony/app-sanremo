@@ -2,16 +2,8 @@ import React from "react";
 import { Package, Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import type { Product } from "@/types/product";
 
-export interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  description?: string;
-  unit: string;
-  category?: string;
-  inStock: boolean;
-}
 
 interface ProductCardProps {
   product: Product;
@@ -94,13 +86,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className={`
             flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium
             ${
-              product.inStock
+              product.quantity > 0
                 ? "bg-success/10 text-success border border-success/20"
                 : "bg-warning/10 text-warning border border-warning/20"
             }
           `}
           >
-            {product.inStock ? "Disponible" : "Sin stock"}
+            {product.quantity > 0 ? "Disponible" : "Sin stock"}
           </div>
         </div>
 
@@ -114,7 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Category (only for detailed variant) */}
         {isDetailed && product.category && (
           <div className="text-xs text-muted-foreground">
-            Categoría: {product.category}
+            Categoría: {product.category.name}
           </div>
         )}
 
@@ -123,7 +115,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <Button
             size={isCompact ? "sm" : "default"}
             variant={selected ? "default" : "outline"}
-            disabled={disabled || !product.inStock}
+            disabled={disabled || product.quantity === 0}
             onClick={(e) => {
               e.stopPropagation();
               handleSelect();

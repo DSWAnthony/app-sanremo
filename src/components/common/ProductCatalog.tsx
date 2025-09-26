@@ -8,84 +8,84 @@ import { Badge } from '@/components/ui/badge';
 import { ProductCard} from '@/components/common/ProductCard';
 import type { Product } from '@/types/product';
 
-// Mock product data
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Papel A4 75g',
-    description: 'Papel blanco para impresión y fotocopiado, formato A4',
-    unit: 'resma',
-    category: 'Papelería',
-    inStock: true
-  },
-  {
-    id: '2',
-    name: 'Tinta HP 664 Negro',
-    description: 'Cartucho de tinta original HP para impresoras DeskJet',
-    unit: 'cartucho',
-    category: 'Consumibles',
-    inStock: true
-  },
-  {
-    id: '3',
-    name: 'Detergente Industrial',
-    description: 'Detergente concentrado para limpieza industrial',
-    unit: 'litro',
-    category: 'Limpieza',
-    inStock: false
-  },
-  {
-    id: '4',
-    name: 'Bolígrafos Azules',
-    description: 'Caja de bolígrafos de tinta azul, trazo medio',
-    unit: 'caja',
-    category: 'Papelería',
-    inStock: true
-  },
-  {
-    id: '5',
-    name: 'Papel Higiénico',
-    description: 'Papel higiénico institucional, doble hoja',
-    unit: 'paquete',
-    category: 'Higiene',
-    inStock: true
-  },
-  {
-    id: '6',
-    name: 'Marcadores Permanentes',
-    description: 'Set de marcadores permanentes multicolor',
-    unit: 'set',
-    category: 'Papelería',
-    inStock: true
-  }
-];
+// // Mock product data
+// const mockProducts: Product[] = [
+//   {
+//     id: 1,
+//     name: 'Papel A4 75g',
+//     description: 'Papel blanco para impresión y fotocopiado, formato A4',
+//     unit: 'resma',
+//     category: 'Papelería',
+//     inStock: true
+//   },
+//   {
+//     id: 2,
+//     name: 'Tinta HP 664 Negro',
+//     description: 'Cartucho de tinta original HP para impresoras DeskJet',
+//     unit: 'cartucho',
+//     category: 'Consumibles',
+//     inStock: true
+//   },
+//   {
+//     id: 3,
+//     name: 'Detergente Industrial',
+//     description: 'Detergente concentrado para limpieza industrial',
+//     unit: 'litro',
+//     category: 'Limpieza',
+//     inStock: false
+//   },
+//   {
+//     id: 4,
+//     name: 'Bolígrafos Azules',
+//     description: 'Caja de bolígrafos de tinta azul, trazo medio',
+//     unit: 'caja',
+//     category: 'Papelería',
+//     inStock: true
+//   },
+//   {
+//     id: 5,
+//     name: 'Papel Higiénico',
+//     description: 'Papel higiénico institucional, doble hoja',
+//     unit: 'paquete',
+//     category: 'Higiene',
+//     inStock: true
+//   },
+//   {
+//     id: 6,
+//     name: 'Marcadores Permanentes',
+//     description: 'Set de marcadores permanentes multicolor',
+//     unit: 'set',
+//     category: 'Papelería',
+//     inStock: true
+//   }
+// ];
 
 interface ProductCatalogProps {
   onProductSelect?: (product: Product) => void;
-  selectedProducts?: string[];
+  catalog: Product[];
+  selectedProducts?: number[];
   viewMode?: 'selection' | 'catalog';
 }
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   onProductSelect,
   selectedProducts = [],
-  viewMode = 'catalog'
+  viewMode = 'catalog',
+  catalog = []
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [stockFilter, setStockFilter] = useState<string>('all');
   const [displayMode, setDisplayMode] = useState<'grid' | 'list'>('grid');
 
-  const categories = Array.from(new Set(mockProducts.map(p => p.category).filter(Boolean)));
+  const categories = Array.from(new Set(catalog.map(p => p.category).filter(Boolean)));
 
-  const filteredProducts = mockProducts.filter(product => {
+  const filteredProducts = catalog.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
-    const matchesStock = stockFilter === 'all' || 
-                        (stockFilter === 'available' ? product.inStock : !product.inStock);
+    const matchesCategory = categoryFilter === 'all' || product.category.name === categoryFilter;
     
-    return matchesSearch && matchesCategory && matchesStock;
+    return matchesSearch && matchesCategory;
   });
 
   const handleProductSelect = (product: Product) => {
@@ -94,16 +94,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     }
   };
 
-  const getProductCounts = () => {
-    return {
-      total: mockProducts.length,
-      available: mockProducts.filter(p => p.inStock).length,
-      outOfStock: mockProducts.filter(p => !p.inStock).length,
-      selected: selectedProducts.length
-    };
-  };
-
-  const counts = getProductCounts();
 
   return (
     <div className="space-y-6">
@@ -127,9 +117,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <ShoppingCart className="h-3 w-3" />
               {selectedProducts.length} seleccionados
             </Badge>
-            <Button>
-              Continuar
-            </Button>
           </div>
         )}
       </div>
@@ -179,8 +166,8 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               <SelectContent>
                 <SelectItem value="all">Todas las categorías</SelectItem>
                 {categories.map(category => (
-                  <SelectItem key={category} value={category!}>
-                    {category}
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
                   </SelectItem>
                 ))}
               </SelectContent>

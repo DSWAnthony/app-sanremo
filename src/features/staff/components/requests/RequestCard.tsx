@@ -1,5 +1,5 @@
 import React from "react";
-import { Calendar, User, Package, FileText, MoreVertical } from "lucide-react";
+import { Calendar, Package, FileText, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,51 +9,52 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { REQUEST_STATUSES } from "@/types/request";
-import type { ProductRequest } from "@/types/product";
+import { REQUEST_STATUSES, type Request } from "@/types/request";
+import { useNavigate } from "react-router-dom";
+import { useRequestForm } from "../../hooks/useRequestForm";
 
 interface RequestCardProps {
-  request: ProductRequest;
+  request: Request;
   showActions?: boolean;
   isDraggable?: boolean;
+  onViewSummary: (request: Request) => void;
 }
 
 export const RequestCard: React.FC<RequestCardProps> = ({
   request,
   showActions = true,
   isDraggable = false,
+  onViewSummary,
 }) => {
+  const navigate = useNavigate();
+  const { onDelete } = useRequestForm();
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       pending: { label: REQUEST_STATUSES.pending, className: "status-pending" },
-      approved: {
-        label: REQUEST_STATUSES.approved,
-        className: "status-approved",
-      },
-      rejected: {
-        label: REQUEST_STATUSES.rejected,
-        className: "status-rejected",
-      },
-      assigned: {
-        label: REQUEST_STATUSES.assigned,
-        className: "status-approved",
-      },
-    };
+      approved: { label: REQUEST_STATUSES.approved, className: "status-approved" },
+      rejected: { label: REQUEST_STATUSES.rejected, className: "status-rejected" },
+      assigned: { label: REQUEST_STATUSES.assigned, className: "status-approved" },
+    } as const;
 
-    const config = statusConfig[status as keyof typeof statusConfig];
+    const config = (statusConfig as any)[status] ?? statusConfig.pending;
     return <Badge className={config.className}>{config.label}</Badge>;
   };
 
   const cardClasses = [
     "card-elevated",
-    isDraggable && "card-draggable cursor-move",
+    isDraggable ? "card-draggable cursor-move" : "",
     "transition-all duration-200",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  ].filter(Boolean).join(" ");
+
+  const handleEdit = (r: Request) => {
+    navigate('/almacen/solicitudes/nueva', {
+      state: { mode: 'edit', request: r, initialStep: 2 }
+    });
+  };
+
+  const createdAt = request.createdAt ? new Date(request.createdAt) : new Date();
 
   return (
     <Card
@@ -73,11 +74,8 @@ export const RequestCard: React.FC<RequestCardProps> = ({
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-foreground text-sm">
-                {request.productName}
+                {request.items.length >= 2 ? `${request.items[0].product.name} y más` : request.items[0].product.name}
               </h3>
-              <p className="text-sm text-muted-foreground">
-                {request.quantity} {request.unit}
-              </p>
             </div>
           </div>
 
@@ -91,10 +89,9 @@ export const RequestCard: React.FC<RequestCardProps> = ({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Editar</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
-                    Eliminar
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onViewSummary(request)}>Ver</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleEdit(request)}>Editar</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onDelete(request.id)} className="text-destructive">Eliminar</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
@@ -107,13 +104,9 @@ export const RequestCard: React.FC<RequestCardProps> = ({
           <div className="mb-3">
             <div className="flex items-center space-x-1 mb-1">
               <FileText className="h-3 w-3 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">
-                Observaciones:
-              </span>
+              <span className="text-xs text-muted-foreground">Observaciones:</span>
             </div>
-            <p className="text-sm text-foreground bg-muted/30 p-2 rounded">
-              {request.observations}
-            </p>
+            <p className="text-sm text-foreground bg-muted/30 p-2 rounded">{request.observations}</p>
           </div>
         )}
 
@@ -121,14 +114,13 @@ export const RequestCard: React.FC<RequestCardProps> = ({
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center space-x-1">
               <Calendar className="h-3 w-3" />
-              <span>
-                {format(request.createdAt, "dd MMM yyyy", { locale: es })}
-              </span>
+              <span>{format(createdAt, "dd MMM yyyy", { locale: es })}</span>
             </div>
           </div>
-
         </div>
       </CardContent>
     </Card>
   );
 };
+
+export default RequestCard;

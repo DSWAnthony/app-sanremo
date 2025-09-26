@@ -1,63 +1,57 @@
-import type { Product } from '@/types/product';
-import type { RequestItem } from '@/types/request';
+// src/hooks/useRequestState.ts
 import { useState, useCallback } from 'react';
+import type { Product } from '@/types/product';
+import type { RequestItemForm } from '@/types/request';
 
 export const useRequestState = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
-  const [requestItems, setRequestItems] = useState<RequestItem[]>([]);
-  const [generalObservations, setGeneralObservations] = useState('');
+  const [requestItems, setRequestItems] = useState<RequestItemForm[]>([]);
+  const [generalObservations, setGeneralObservations] = useState<string>('');
 
   const handleProductSelect = useCallback((product: Product) => {
-  setSelectedProducts(prev => {
-    const isSelected = prev.some(p => p.id === product.id);
-    
-    if (isSelected) {
-      // Remove product
-      const newProducts = prev.filter(p => p.id !== product.id);
-      setRequestItems(prevItems => prevItems.filter(item => item.productId !== product.id));
-      return newProducts;
-    } else {
-      // Add product - pero primero verificar que no exista ya en requestItems
-      setRequestItems(prevItems => {
-        // Si ya existe, no lo agregamos de nuevo
-        if (prevItems.some(item => item.productId === product.id)) {
-          return prevItems;
-        }
-        return [
-          ...prevItems, 
-          {
-            productId: product.id,
-            productName: product.name,
-            unit: product.unit,
-            quantity: 1,
-            observations: ''
-          }
-        ];
-      });
-      return [...prev, product];
-    }
-  });
-}, []);
+    setSelectedProducts(prev => {
+      const isSelected = prev.some(p => p.id === product.id);
 
-  const handleQuantityChange = useCallback((productId: string, quantity: number) => {
-    setRequestItems(prev => prev.map(item => 
-      item.productId === productId ? { ...item, quantity } : item
-    ));
+      if (isSelected) {
+        // Remover producto y su item asociado
+        setRequestItems(prevItems => prevItems.filter(item => item.productId !== product.id));
+        return prev.filter(p => p.id !== product.id);
+      } else {
+        // Añadir producto y si no existe, crear requestItem con quantity 1
+        setRequestItems(prevItems => {
+          if (prevItems.some(item => item.productId === product.id)) return prevItems;
+          return [
+            ...prevItems,
+            {
+              // RequestItemForm shape asumida
+              productId: product.id,
+              productName: product.name,
+              unit: product.unit ?? '',
+              quantity: 1,
+              observations: ''
+            }
+          ];
+        });
+        return [...prev, product];
+      }
+    });
   }, []);
 
-  const handleObservationsChange = useCallback((productId: string, observations: string) => {
-    setRequestItems(prev => prev.map(item => 
-      item.productId === productId ? { ...item, observations } : item
-    ));
+  const handleQuantityChange = useCallback((productId: number, quantity: number) => {
+    setRequestItems(prev => prev.map(item => item.productId === productId ? { ...item, quantity } : item));
+  }, []);
+
+  const handleObservationsChange = useCallback((productId: number, observations: string) => {
+    setRequestItems(prev => prev.map(item => item.productId === productId ? { ...item, observations } : item));
   }, []);
 
   const nextStep = useCallback(() => {
-    setCurrentStep(prev => prev + 1);
+    setCurrentStep(prev => Math.min(3, prev + 1));
   }, []);
 
   const prevStep = useCallback(() => {
-    setCurrentStep(prev => prev - 1);
+    setCurrentStep(prev => Math.max(1, prev - 1));
   }, []);
 
   const resetForm = useCallback(() => {
@@ -79,6 +73,10 @@ export const useRequestState = () => {
     nextStep,
     prevStep,
     resetForm,
-    setCurrentStep
+    setCurrentStep,
+    setSelectedProducts,
+    setRequestItems
   };
 };
+
+export default useRequestState;
